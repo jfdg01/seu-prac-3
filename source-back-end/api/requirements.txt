@@ -1,0 +1,5 @@
+fastapi
+uvicorn[standard]
+influxdb-client
+pydantic
+paho-mqtt>=2.0.0

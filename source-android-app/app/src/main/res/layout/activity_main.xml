@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Configuración MQTT"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/etIpAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="IP del Ordenador (ej. 192.168.1.50)"
+        android:inputType="textUri" />
+
+    <Button
+        android:id="@+id/btnConnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Conectar"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estado: Desconectado"
+        android:layout_marginBottom="16dp"
+        android:textColor="#FF0000"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sensores Disponibles"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        
+        <LinearLayout
+            android:id="@+id/sensorListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+    </ScrollView>
+
+</LinearLayout>

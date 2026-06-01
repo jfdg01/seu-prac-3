@@ -1,0 +1,14 @@
+# Proveedor de paneles: Grafana carga cualquier dashboard JSON que encuentre
+# en la carpeta indicada (montada desde ./grafana/dashboards).
+apiVersion: 1
+
+providers:
+  - name: Sensores
+    orgId: 1
+    folder: ""
+    type: file
+    disableDeletion: false
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false

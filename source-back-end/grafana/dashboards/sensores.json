@@ -1,0 +1,521 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_sensores"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "unit": "accMS2"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "title": "Aceleración — módulo √(x²+y²+z²)  (m/s²)",
+      "description": "Magnitud de la aceleración. Discrimina claramente PARADO (~9.8, constante) de CAMINANDO (oscila con cada paso).",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_sensores"
+          },
+          "refId": "A",
+          "query": "import \"math\"\nfrom(bucket: \"sensores_bucket\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn: (r) => r._measurement == \"sensors/accelerometer\") |> filter(fn: (r) => r._field == \"value_0\" or r._field == \"value_1\" or r._field == \"value_2\") |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\") |> filter(fn: (r) => exists r.value_0 and exists r.value_1 and exists r.value_2) |> map(fn: (r) => ({ _time: r._time, _value: math.sqrt(x: r.value_0 * r.value_0 + r.value_1 * r.value_1 + r.value_2 * r.value_2) })) |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false) |> yield(name: \"modulo\")"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_sensores"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "unit": "accMS2"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "title": "Acelerómetro — ejes X / Y / Z  (m/s²)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_sensores"
+          },
+          "refId": "A",
+          "query": "from(bucket: \"sensores_bucket\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn: (r) => r._measurement == \"sensors/accelerometer\") |> filter(fn: (r) => r._field == \"value_0\" or r._field == \"value_1\" or r._field == \"value_2\") |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_sensores"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "unit": "rotrads"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "title": "Giroscopio — ejes X / Y / Z  (rad/s)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_sensores"
+          },
+          "refId": "A",
+          "query": "from(bucket: \"sensores_bucket\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn: (r) => r._measurement == \"sensors/gyroscope\") |> filter(fn: (r) => r._field == \"value_0\" or r._field == \"value_1\" or r._field == \"value_2\") |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_sensores"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "unit": "accMS2"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 17
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "title": "Aceleración lineal — módulo (sin gravedad)  (m/s²)",
+      "description": "Aceleración con la gravedad ya descontada: ~0 en reposo, picos al caminar.",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_sensores"
+          },
+          "refId": "A",
+          "query": "import \"math\"\nfrom(bucket: \"sensores_bucket\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn: (r) => r._measurement == \"sensors/linear_acceleration\") |> filter(fn: (r) => r._field == \"value_0\" or r._field == \"value_1\" or r._field == \"value_2\") |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\") |> filter(fn: (r) => exists r.value_0 and exists r.value_1 and exists r.value_2) |> map(fn: (r) => ({ _time: r._time, _value: math.sqrt(x: r.value_0 * r.value_0 + r.value_1 * r.value_1 + r.value_2 * r.value_2) })) |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false) |> yield(name: \"modulo\")"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_sensores"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto"
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Muestras"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_measurement"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Sensor (topic)"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 17
+      },
+      "id": 5,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "Muestras",
+            "desc": true
+          }
+        ]
+      },
+      "title": "Muestras recibidas por sensor (rango actual)",
+      "description": "Recuento de muestras (value_0) por topic en el rango temporal seleccionado.",
+      "type": "table",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_sensores"
+          },
+          "refId": "A",
+          "query": "from(bucket: \"sensores_bucket\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn: (r) => r._field == \"value_0\") |> group(columns: [\"_measurement\"]) |> count() |> group() |> sort(columns: [\"_value\"], desc: true) |> keep(columns: [\"_measurement\", \"_value\"])"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_sensores"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "fillOpacity": 85,
+            "lineWidth": 0
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": null,
+                "color": "green"
+              },
+              {
+                "value": 1,
+                "color": "orange"
+              },
+              {
+                "value": 2,
+                "color": "red"
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Parado",
+                  "color": "green",
+                  "index": 0
+                },
+                "1": {
+                  "text": "Caminando",
+                  "color": "orange",
+                  "index": 1
+                },
+                "2": {
+                  "text": "Corriendo",
+                  "color": "red",
+                  "index": 2
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 16,
+        "x": 0,
+        "y": 25
+      },
+      "id": 6,
+      "options": {
+        "mergeValues": true,
+        "showValue": "auto",
+        "rowHeight": 0.9,
+        "alignValue": "center",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "title": "Estado de actividad (parado / caminando / corriendo)",
+      "description": "Clasificación por desviación típica del módulo de aceleración en ventanas de 2 s. Ajusta los umbrales arriba.",
+      "type": "state-timeline",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_sensores"
+          },
+          "refId": "A",
+          "query": "import \"math\"\nfrom(bucket: \"sensores_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"sensors/accelerometer\")\n  |> filter(fn: (r) => r._field == \"value_0\" or r._field == \"value_1\" or r._field == \"value_2\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> filter(fn: (r) => exists r.value_0 and exists r.value_1 and exists r.value_2)\n  |> map(fn: (r) => ({ _time: r._time, _value: math.sqrt(x: r.value_0 * r.value_0 + r.value_1 * r.value_1 + r.value_2 * r.value_2) }))\n  |> aggregateWindow(every: 2s, fn: stddev, createEmpty: false)\n  |> filter(fn: (r) => exists r._value)\n  |> map(fn: (r) => ({ _time: r._time, _value: if r._value < ${umbral_caminar} then 0.0 else if r._value < ${umbral_correr} then 1.0 else 2.0 }))\n  |> yield(name: \"estado\")"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_sensores"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "filterable": false
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": null,
+                "color": "text"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "estado"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Estado"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "segundos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Tiempo"
+              },
+              {
+                "id": "unit",
+                "value": "dtdurations"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 25
+      },
+      "id": 7,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "Tiempo",
+            "desc": true
+          }
+        ]
+      },
+      "title": "Tiempo en cada estado (rango actual)",
+      "description": "Suma del tiempo en cada estado dentro del rango temporal seleccionado (ventanas de 2 s).",
+      "type": "table",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_sensores"
+          },
+          "refId": "A",
+          "query": "import \"math\"\nfrom(bucket: \"sensores_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"sensors/accelerometer\")\n  |> filter(fn: (r) => r._field == \"value_0\" or r._field == \"value_1\" or r._field == \"value_2\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> filter(fn: (r) => exists r.value_0 and exists r.value_1 and exists r.value_2)\n  |> map(fn: (r) => ({ _time: r._time, _value: math.sqrt(x: r.value_0 * r.value_0 + r.value_1 * r.value_1 + r.value_2 * r.value_2) }))\n  |> aggregateWindow(every: 2s, fn: stddev, createEmpty: false)\n  |> filter(fn: (r) => exists r._value)\n  |> map(fn: (r) => ({ _time: r._time, estado: if r._value < ${umbral_caminar} then \"Parado\" else if r._value < ${umbral_correr} then \"Caminando\" else \"Corriendo\" }))\n  |> group(columns: [\"estado\"])\n  |> reduce(identity: {segundos: 0.0}, fn: (r, accumulator) => ({ segundos: accumulator.segundos + 2.0 }))\n  |> group()\n  |> sort(columns: [\"segundos\"], desc: true)"
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "tags": [
+    "sensores",
+    "wsn",
+    "ujaen"
+  ],
+  "templating": {
+    "list": [
+      {
+        "type": "textbox",
+        "name": "umbral_caminar",
+        "label": "Umbral parado→caminando (m/s²)",
+        "query": "0.5",
+        "current": {
+          "text": "0.5",
+          "value": "0.5"
+        },
+        "hide": 0,
+        "skipUrlSync": false
+      },
+      {
+        "type": "textbox",
+        "name": "umbral_correr",
+        "label": "Umbral caminando→corriendo (m/s²)",
+        "query": "4.0",
+        "current": {
+          "text": "4.0",
+          "value": "4.0"
+        },
+        "hide": 0,
+        "skipUrlSync": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Red de Sensores — WSN",
+  "uid": "sensores-wsn",
+  "version": 2,
+  "weekStart": ""
+}

@@ -1,0 +1,31 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.venv-report/
+
+# ---- Android / Gradle ----
+.gradle/
+build/
+*.apk
+*.aab
+*.ap_
+*.dex
+local.properties
+.cxx/
+captures/
+*.iml
+
+# ---- IDE / editor ----
+.idea/
+.vscode/
+*.swp
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+
+# Note: figuras/ and informe.pdf are kept intentionally (report deliverables).
